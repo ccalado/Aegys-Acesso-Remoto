@@ -543,6 +543,7 @@ Var
  TamanhoPalavra : Integer;
  vOnMouseShow   : Boolean;
 Begin
+ Processmessages;
  vOnMouseShow   := False;
  If aLine.Contains(cShowMouse)    Then
   Begin
@@ -812,7 +813,7 @@ Begin
   End
  Else If aLine <> '' Then
   SendKeys(PWideChar(aLine), False);
-// Processmessages;
+ Processmessages;
 // BlockInput(Bblockinput);
 End;
 
@@ -1377,7 +1378,7 @@ Begin
       Conexao.SendBytes(aPack)
      Else
       Conexao.SendCommand(aConnection, aPack);
-//     Processmessages;
+     Processmessages;
     End;
   End;
 End;
@@ -1394,9 +1395,9 @@ Var
    vMonitor := aMonitor;
    If vMonitor = '' Then
     vMonitor := '0';
+   Processmessages;
    GetScreenToMemoryStream(aPackClass, vDrawCursor, pf16bit, vMonitor, aFullFrame);
   Finally
-   Processmessages;
   End;
  End;
 Begin
@@ -1413,8 +1414,8 @@ Begin
                                aPackList.Add(aPackClass)
                               Else
                                Exit;
-                              Processmessages;
                              End);
+    Processmessages;
    End;
  Except
  End;
@@ -1644,6 +1645,7 @@ Var
 Begin
  If Assigned(FormTelaRemota) Then
   Begin
+   Processmessages;
    vStream := TMemoryStream.Create;
    Try
     If Command <> '' Then
@@ -1665,27 +1667,7 @@ Begin
      End;
     Processmessages;
     Try
-//     If (vActualImage.Size = 0) Then
-//      Begin
      vStream.Position := 0;
-//       vActualImage.Clear;
-//       vActualImage.CopyFrom(vStream, vStream.Size);
-//       vStream.Position := 0;
-//      End
-//     Else
-//      Begin
-//       vActualImage.Position := 0;
-//       vResultMemoryStream := TMemoryStream.Create;
-//       ResumeStreamB(vActualImage, vResultMemoryStream, TMemoryStream(vStream));
-//       vResultMemoryStream.Position := 0;
-//       vActualImage.Clear;
-//       vActualImage.CopyFrom(vResultMemoryStream, vResultMemoryStream.Size);
-//       vResultMemoryStream.Position := 0;
-//       TMemoryStream(vStream).Clear;
-//       vStream.CopyFrom(vResultMemoryStream, vResultMemoryStream.Size);
-//       vStream.Position  := 0;
-//       FreeAndnil(vResultMemoryStream);
-//      End;
      ResizeScreen(vResolucaoAltura, vResolucaoLargura);
      If (aFirstCapture) And
         (aIncSprite = cMaxSpriteCap) Then
@@ -1700,22 +1682,23 @@ Begin
           MyConnection.ConnectionLastShot := vImageFile;
           If Assigned(fFavoritos) Then
            fFavoritos.SetImage(MyConnection, MyConnection.ConnectionLastShot);
+          Processmessages;
          End;
         aFirstCapture := False;
        Finally
         FreeAndNil(vStreamBitmap);
-        Processmessages;
        End;
       End
      Else If (aFirstCapture) Then
       Inc(aIncSprite);
      FormTelaRemota.imgTelaRemota.Fill.Bitmap.Bitmap.LoadFromStream(vStream); //.Bitmap.LoadFromStream(vStream);
+     Processmessages;
      vGetFPS := GetFps;
      If vGetFPS > 0 Then
       FormTelaRemota.Caption := Format(cCaptureTitle, [vClientID, vGetFPS]);
+     Processmessages;
     Finally
      FreeAndNil(vStream);
-     Processmessages;
     End;
    Finally
     Processmessages;

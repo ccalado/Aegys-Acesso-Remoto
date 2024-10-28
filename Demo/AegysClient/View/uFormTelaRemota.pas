@@ -235,261 +235,266 @@ Var
 Begin
  If Self <> Screen.ActiveForm Then
   Exit;
- // The keys programmed here, may not match the keys on your keyboard. I recommend to undertake adaptation.
  Try
-  { Combo }
-  // Alt
-  If not(AltPressed) Then
-   Begin
-    If (GetKeyState(VK_MENU) < 0) Then
+   // The keys programmed here, may not match the keys on your keyboard. I recommend to undertake adaptation.
+   Try
+    { Combo }
+    // Alt
+    If not(AltPressed) Then
      Begin
-      AltPressed := true;
-      SendSocketKeys('<|ALTDOWN|>');
+      If (GetKeyState(VK_MENU) < 0) Then
+       Begin
+        AltPressed := true;
+        SendSocketKeys('<|ALTDOWN|>');
+       End;
+     End
+    Else
+     Begin
+      If (GetKeyState(VK_MENU) > -1) Then
+       Begin
+        AltPressed := false;
+        SendSocketKeys('<|ALTUP|>');
+       End;
      End;
-   End
-  Else
-   Begin
-    If (GetKeyState(VK_MENU) > -1) Then
+    // Ctrl
+    If Not(CtrlPressed) Then
      Begin
-      AltPressed := false;
-      SendSocketKeys('<|ALTUP|>');
+      If (GetKeyState(VK_CONTROL) < 0) Then
+       Begin
+        CtrlPressed := true;
+        SendSocketKeys('<|CTRLDOWN|>');
+       End;
+     End
+    Else
+     Begin
+      If (GetKeyState(VK_CONTROL) > -1) Then
+       Begin
+        CtrlPressed := false;
+        SendSocketKeys('<|CTRLUP|>');
+       End;
      End;
-   End;
-  // Ctrl
-  If Not(CtrlPressed) Then
-   Begin
-    If (GetKeyState(VK_CONTROL) < 0) Then
+     // Shift
+    If Not(ShiftPressed) Then
      Begin
-      CtrlPressed := true;
-      SendSocketKeys('<|CTRLDOWN|>');
+      If (GetKeyState(VK_SHIFT) < 0) Then
+       Begin
+        ShiftPressed := true;
+        SendSocketKeys('<|SHIFTDOWN|>');
+       End;
+     End
+    Else
+     Begin
+      If (GetKeyState(VK_SHIFT) > -1) Then
+       Begin
+        ShiftPressed := false;
+        SendSocketKeys('<|SHIFTUP|>');
+       End;
      End;
-   End
-  Else
-   Begin
-    If (GetKeyState(VK_CONTROL) > -1) Then
+    For I := 8 To 228 Do
      Begin
-      CtrlPressed := false;
-      SendSocketKeys('<|CTRLUP|>');
-     End;
-   End;
-   // Shift
-  If Not(ShiftPressed) Then
-   Begin
-    If (GetKeyState(VK_SHIFT) < 0) Then
-     Begin
-      ShiftPressed := true;
-      SendSocketKeys('<|SHIFTDOWN|>');
-     End;
-   End
-  Else
-   Begin
-    If (GetKeyState(VK_SHIFT) > -1) Then
-     Begin
-      ShiftPressed := false;
-      SendSocketKeys('<|SHIFTUP|>');
-     End;
-   End;
-  For I := 8 To 228 Do
-   Begin
-    If (GetAsyncKeyState(I) = -32767) Then
-     Begin
-      Case I Of
-       8   : SendSocketKeys('{BS}');
-       9   : SendSocketKeys('{TAB}');
-       13  : SendSocketKeys('{ENTER}');
-       27  : Begin
-              If IgnoreKey Then
-               IgnoreKey := false
-              Else
-               SendSocketKeys('{ESCAPE}');
-             End;
-       32  : SendSocketKeys(' ');
-       33  : SendSocketKeys('{PGUP}');
-       34  : SendSocketKeys('{PGDN}');
-       35  : SendSocketKeys('{END}');
-       36  : SendSocketKeys('{HOME}');
-       37  : SendSocketKeys('{LEFT}');
-       38  : SendSocketKeys('{UP}');
-       39  : SendSocketKeys('{RIGHT}');
-       40  : SendSocketKeys('{DOWN}');
-       44  : SendSocketKeys('{PRTSC}');
-       46  : SendSocketKeys('{DEL}');
-       91  : Begin
-              IgnoreKey := true;
-              Keybd_Event(VK_ESCAPE, 0, 0, 0);
-              SendSocketKeys('{LWIN}');
-             End;
-       92  : Begin
-              IgnoreKey := true;
-              Keybd_Event(VK_ESCAPE, 0, 0, 0);
-              SendSocketKeys('{RWIN}');
-             End;
-       145 : SendSocketKeys('{SCROLLLOCK}');
-       // Numbers: 1 2 3 4 5 6 7 8 9 and ! @ # $ % ¨& * ( )
-       48  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys(')')
-              Else
-              SendSocketKeys('0');
-             End;
-       49  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('!')
-              Else
-               SendSocketKeys('1');
-             End;
-       50  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('@')
-              Else
-               SendSocketKeys('2');
-             End;
-       51  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('#')
-              Else
-               SendSocketKeys('3');
-             End;
-       52  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('$')
-              Else
-               SendSocketKeys('4');
-             End;
-       53  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('%')
-              Else
-               SendSocketKeys('5');
-             End;
-       54  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('^')
-              Else
-               SendSocketKeys('6');
-             End;
-       55  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('&')
-              Else
-               SendSocketKeys('7');
-             End;
-       56  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('*')
-              Else
-               SendSocketKeys('8');
-             End;
-       57  : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('(')
-              Else
-               SendSocketKeys('9');
-             End;
-       65 .. 90 : Begin// A..Z / a..z
-                   If (GetKeyState(VK_CAPITAL) = 1)    Then
-                    Begin
-                     If (GetKeyState(VK_SHIFT) < 0)    Then
-                      SendSocketKeys(LowerCase(Chr(I)))
+      If (GetAsyncKeyState(I) = -32767) Then
+       Begin
+        Case I Of
+         8   : SendSocketKeys('{BS}');
+         9   : SendSocketKeys('{TAB}');
+         13  : SendSocketKeys('{ENTER}');
+         27  : Begin
+                If IgnoreKey Then
+                 IgnoreKey := false
+                Else
+                 SendSocketKeys('{ESCAPE}');
+               End;
+         32  : SendSocketKeys(' ');
+         33  : SendSocketKeys('{PGUP}');
+         34  : SendSocketKeys('{PGDN}');
+         35  : SendSocketKeys('{END}');
+         36  : SendSocketKeys('{HOME}');
+         37  : SendSocketKeys('{LEFT}');
+         38  : SendSocketKeys('{UP}');
+         39  : SendSocketKeys('{RIGHT}');
+         40  : SendSocketKeys('{DOWN}');
+         44  : SendSocketKeys('{PRTSC}');
+         46  : SendSocketKeys('{DEL}');
+         91  : Begin
+                IgnoreKey := true;
+                Keybd_Event(VK_ESCAPE, 0, 0, 0);
+                SendSocketKeys('{LWIN}');
+               End;
+         92  : Begin
+                IgnoreKey := true;
+                Keybd_Event(VK_ESCAPE, 0, 0, 0);
+                SendSocketKeys('{RWIN}');
+               End;
+         145 : SendSocketKeys('{SCROLLLOCK}');
+         // Numbers: 1 2 3 4 5 6 7 8 9 and ! @ # $ % ¨& * ( )
+         48  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys(')')
+                Else
+                SendSocketKeys('0');
+               End;
+         49  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('!')
+                Else
+                 SendSocketKeys('1');
+               End;
+         50  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('@')
+                Else
+                 SendSocketKeys('2');
+               End;
+         51  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('#')
+                Else
+                 SendSocketKeys('3');
+               End;
+         52  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('$')
+                Else
+                 SendSocketKeys('4');
+               End;
+         53  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('%')
+                Else
+                 SendSocketKeys('5');
+               End;
+         54  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('^')
+                Else
+                 SendSocketKeys('6');
+               End;
+         55  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('&')
+                Else
+                 SendSocketKeys('7');
+               End;
+         56  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('*')
+                Else
+                 SendSocketKeys('8');
+               End;
+         57  : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('(')
+                Else
+                 SendSocketKeys('9');
+               End;
+         65 .. 90 : Begin// A..Z / a..z
+                     If (GetKeyState(VK_CAPITAL) = 1)    Then
+                      Begin
+                       If (GetKeyState(VK_SHIFT) < 0)    Then
+                        SendSocketKeys(LowerCase(Chr(I)))
+                       Else
+                        SendSocketKeys(UpperCase(Chr(I)));
+                      End
+                     Else If (GetKeyState(VK_SHIFT) < 0) Then
+                      SendSocketKeys(UpperCase(Chr(I)))
                      Else
-                      SendSocketKeys(UpperCase(Chr(I)));
-                    End
-                   Else If (GetKeyState(VK_SHIFT) < 0) Then
-                    SendSocketKeys(UpperCase(Chr(I)))
-                   Else
-                    SendSocketKeys(LowerCase(Chr(I)))
-                  End;
-       96 .. 105 : SendSocketKeys(IntToStr(I - 96)); // Numpad 1..9
-       106 : SendSocketKeys('*');
-       107 : SendSocketKeys('+');
-       109 : SendSocketKeys('-');
-       110 : SendSocketKeys(',');
-       111 : SendSocketKeys('/');
-       194 : SendSocketKeys('.');
-       // F1..F12
-       112 .. 123 : SendSocketKeys('{F' + IntToStr(I - 111) + '}');
-       186 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('Ç')
-              Else
-               SendSocketKeys('ç');
-             End;
-       187 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('+')
-              Else
-               SendSocketKeys('=');
-             End;
-       188 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('<')
-              Else
-               SendSocketKeys(',');
-             End;
-       189 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('_')
-              Else
-               SendSocketKeys('-');
-             End;
-       190 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('>')
-              Else
-               SendSocketKeys('.');
-             End;
-       191 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys(':')
-              Else
-               SendSocketKeys(';');
-             End;
-       192 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('"')
-              Else
-               SendSocketKeys('''');
-             End;
-       193 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('?')
-              Else
-               SendSocketKeys('/');
-             End;
-       219 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('`')
-              Else
-               SendSocketKeys('´');
-             End;
-       220 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('}')
-              Else
-               SendSocketKeys(']');
-             End;
-       221 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('{')
-              Else
-               SendSocketKeys('[');
-             End;
-       222 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('^')
-              Else
-               SendSocketKeys('~');
-             End;
-       226 : Begin
-              If (GetKeyState(VK_SHIFT) < 0) Then
-               SendSocketKeys('|')
-              Else
-               SendSocketKeys('\');
-             End;
-      End;
+                      SendSocketKeys(LowerCase(Chr(I)))
+                    End;
+         96 .. 105 : SendSocketKeys(IntToStr(I - 96)); // Numpad 1..9
+         106 : SendSocketKeys('*');
+         107 : SendSocketKeys('+');
+         109 : SendSocketKeys('-');
+         110 : SendSocketKeys(',');
+         111 : SendSocketKeys('/');
+         194 : SendSocketKeys('.');
+         // F1..F12
+         112 .. 123 : SendSocketKeys('{F' + IntToStr(I - 111) + '}');
+         186 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('Ç')
+                Else
+                 SendSocketKeys('ç');
+               End;
+         187 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('+')
+                Else
+                 SendSocketKeys('=');
+               End;
+         188 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('<')
+                Else
+                 SendSocketKeys(',');
+               End;
+         189 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('_')
+                Else
+                 SendSocketKeys('-');
+               End;
+         190 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('>')
+                Else
+                 SendSocketKeys('.');
+               End;
+         191 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys(':')
+                Else
+                 SendSocketKeys(';');
+               End;
+         192 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('"')
+                Else
+                 SendSocketKeys('''');
+               End;
+         193 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('?')
+                Else
+                 SendSocketKeys('/');
+               End;
+         219 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('`')
+                Else
+                 SendSocketKeys('´');
+               End;
+         220 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('}')
+                Else
+                 SendSocketKeys(']');
+               End;
+         221 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('{')
+                Else
+                 SendSocketKeys('[');
+               End;
+         222 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('^')
+                Else
+                 SendSocketKeys('~');
+               End;
+         226 : Begin
+                If (GetKeyState(VK_SHIFT) < 0) Then
+                 SendSocketKeys('|')
+                Else
+                 SendSocketKeys('\');
+               End;
+        End;
+       End
+      Else
+       Processmessages;
      End;
+   Except
    End;
- Except
+ Finally
  End;
 End;
 
@@ -520,12 +525,14 @@ End;
 Procedure TFormTelaRemota.FormClose  (Sender      : TObject;
                                       Var Action  : TCloseAction);
 Begin
+ Processmessages;
  TThread.Synchronize(Nil, Procedure
                      Begin
                       taction.Enabled  := False;
                       tCapturarComandos.Enabled  := False;
                       cShowForm        := True;
                       FormConexao.SetPeerDisconnected;
+                      Processmessages;
                       FreeAndNil(vMouseMove);
                       If Assigned(fFileTransfer) then
                        fFileTransfer.Close;
@@ -536,7 +543,6 @@ Begin
                        FormConexao.SetOnline;
                       Finally
                        FormTelaRemota := Nil;
-//                       Action := TCloseAction.caFree;
                       End;
                       FreeAndNil(aPackList);
                      End);
@@ -702,6 +708,7 @@ Begin
  If Not Active Then
   Exit;
  Sblockinput := IfThen(vBlockInputs, cBlockInput, '');
+ Processmessages;
  If TestResolution(4, 3, vResolucaoLargura, vResolucaoAltura) Then
   Begin
    iX          := Trunc(X * vResolucaoLargura) Div Trunc(imgTelaRemota.Width);
@@ -743,6 +750,7 @@ Begin
   Exit;
  If vInAction  Then
   Exit;
+ Processmessages;
  If TestResolution(4, 3, vResolucaoLargura, vResolucaoAltura) Then
   Begin
    iX          := Trunc(X * vResolucaoLargura) Div Trunc(imgTelaRemota.Width);
@@ -779,6 +787,7 @@ Begin
  If Not Active Then
   Exit;
  Sblockinput := IfThen(vBlockInputs, cBlockInput, '');
+ Processmessages;
  If TestResolution(4, 3, vResolucaoLargura, vResolucaoAltura) Then
   Begin
    iX          := Trunc(X * vResolucaoLargura) Div Trunc(imgTelaRemota.Width);
@@ -825,6 +834,7 @@ Var
  aPackClass  : TPackClass;
 Begin
  Sblockinput             := IfThen(vBlockInputs, cBlockInput, '');
+ Processmessages;
  aPackClass              := TPackClass.Create;
  Try
   aPackClass.DataMode    := tdmClientCommand;
@@ -833,7 +843,7 @@ Begin
   aPackClass.Command     := AKeys + Sblockinput;
   aPackClass.Dest        := vConnection;
   Conexao.SendBytes(vConnection, aPackClass.ToBytes, '', aPackClass.CommandType);
-  Application.Processmessages;
+  Processmessages;
  Finally
   FreeAndNil(aPackClass);
  End;
@@ -845,6 +855,7 @@ Var
  aPackClass  : TPackClass;
 Begin
  Sblockinput             := IfThen(vBlockInputs, cBlockInput, '');
+ Processmessages;
  aPackClass              := TPackClass.Create;
  Try
   aPackClass.DataMode    := tdmClientCommand;
@@ -853,7 +864,7 @@ Begin
   aPackClass.Command     := AKeys + Sblockinput;
   aPackClass.Dest        := vConnection;
   Conexao.SendBytes(vConnection, aPackClass.ToBytes, '', aPackClass.CommandType);
-  Application.Processmessages;
+  Processmessages;
  Finally
   FreeAndNil(aPackClass);
  End;
